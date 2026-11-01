@@ -1,0 +1,38 @@
+# Python / Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Data & Database
+*.db
+*.sqlite3
+*.sqlite
+data/
+*.csv
+*.json
+
+# Environment variables & Credentials
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing & Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# OS Specific
+.DS_Store
+Thumbs.db
