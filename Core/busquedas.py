@@ -1,12 +1,10 @@
-"""Implementacion de los algoritmos de busqueda"""
-
-
 #Busqueda informada
 
 import heapq  #Cola de prioridad
 import itertools # lo utilizamos para generar numeros crecientes para el desempate
 import time
 from Core.heuristica import h_cero 
+from collections import deque
 
 #Implementación  de los 4 algoritmos de busqueda :
 #    Amplitud               
@@ -67,6 +65,44 @@ class Resultado:
 #metodo para comparar entre dos metas, cual es mas eficiente
 def _clave_calidad(nodo):
     return (-len(nodo.estado.rescatadas),nodo.estado.tick)
+
+
+#Busqueda en amplitud - BFS
+def busqueda_amplitud(problema):
+    inicio_reloj = time.perf_counter()
+    inicial = problema.estado_inicial()
+    cola = deque([Nodo(inicial)])
+    visitados = {inicial}
+    expandidos = 0
+    generados = 1
+    mejor = None
+
+    while cola:
+        nodo = cola.popleft()
+        estado = nodo.estado
+
+        #si ya no podemos rescatar mas, comparamos esta ruta
+        if problema.es_meta(estado):
+            if mejor is None or _clave_calidad(nodo) < _clave_calidad(mejor):
+                mejor = nodo
+
+            #si salvamos a todos, ya tenemos la mejor solucion
+            if len(estado.rescatadas) == problema.total:
+                break
+            continue
+
+        #revisamos los movimientos posibles desde este estado
+        expandidos += 1
+        for accion, hijo in problema.sucesores(estado):
+            if hijo in visitados:
+                continue
+            visitados.add(hijo)
+            generados += 1
+            cola.append(Nodo(hijo, nodo, accion))
+
+    return Resultado("BFS", mejor, problema, expandidos, generados,
+                     time.perf_counter() - inicio_reloj)
+
     
 #Funcion auxiliar para Costo uniforme y A*
 def _busqueda_por_prioridad(problema,heuristica,nombre):
