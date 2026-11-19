@@ -48,9 +48,10 @@ class Resultado:
         self.expandidos = expandidos
         self.generados = generados
         self.tiempo = tiempo
+        final = nodo_meta.estado
         self.rescatadas = len(nodo_meta.estado.rescatadas)
         self.fallecidas = problema.total - self.rescatadas
-        ticks = nodo_meta.estado.tick
+        self.ticks = final.tick
     
     #convertimos el metodo a estatico para tomar el nodo que tenemos no self
     @staticmethod

@@ -2,26 +2,26 @@
 
 class Estado : 
     #Lo creamos para ahorrar memoria, evitando crear diccionarios
-    __slots__ = ("fila","columna","vivas","ticks","rescatadas","victimas","_clave","_hash")
+    __slots__ = ("fila","columna","vivas","tick","rescatadas","muertas","_clave","_hash")
     
-    def __init__(self,fila,columna,vivas,ticks,rescatadas,victimas):
+    def __init__(self,fila,columna,vivas,tick,rescatadas,muertas):
         
         self.fila = fila
         self.columna = columna
         self.vivas = vivas
-        self.ticks = ticks
+        self.tick = tick
         self.rescatadas = rescatadas
-        self.victimas = victimas
+        self.muertas = muertas
         
         
         #Generacion de clave para identidad
-        self._clave = (fila,columna,vivas,ticks,rescatadas)
+        self._clave = (fila,columna,vivas,tick,rescatadas)
         
         #Clave hash
         self._hash = hash(self._clave)
     
              
-    def __equ__(self,otro):
+    def __eq__(self,otro):
         #Igualdad por clave
         if not isinstance(otro,Estado):
             return NotImplemented
@@ -42,7 +42,7 @@ class ProblemaRescate:
     def __init__(self,mapa,victimas):
         
         self.mapa = mapa
-        self.victima = victimas
+        self.victimas = victimas
         #lo usamos para calcular costos y estadisticas
         self.total = len(victimas) 
         #(posicion -> id)
@@ -87,7 +87,7 @@ class ProblemaRescate:
                 #sacamela de las vivas
                 vivas = vivas - {id_aqui} 
                 #metela en recatadas
-                rescatadas | {id_aqui}
+                rescatadas = rescatadas | {id_aqui}
             
             #victimas difuntas en este tick
             murieron = {v for v in vivas if self.victimas[v].ticks < nuevo_tick}
