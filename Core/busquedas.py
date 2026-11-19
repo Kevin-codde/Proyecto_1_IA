@@ -156,7 +156,7 @@ def busqueda_profundidad_iterativa(problema):
         if not cortado:
             break
         
-        return Resultado("IDDFS",mejor,problema,expandidos,generados,time.perf_counter() - inicio_reloj)           
+    return Resultado("IDDFS",mejor,problema,expandidos,generados,time.perf_counter() - inicio_reloj)           
             
     
 
