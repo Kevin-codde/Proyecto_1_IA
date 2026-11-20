@@ -140,7 +140,6 @@ def _busqueda_por_prioridad(problema,heuristica,nombre):
             heapq.heappush(frontera,(evaluar(hijo),hijo.tick , next(desempate),Nodo(hijo,nodo,accion)))
     return Resultado(nombre,meta_encontrada,problema,expandidos,generados,time.perf_counter() - inicio_reloj)
 
-
 #Costo uniforme (UCS) 
 def busqueda_costo_uniforme(problema):
     """UCS: ordena solo por g(n) (muertes acumuladas). Equivale a A* con h = 0."""
@@ -193,7 +192,7 @@ def busqueda_profundidad_iterativa(problema):
     return Resultado("IDDFS",mejor,problema,expandidos,generados,time.perf_counter() - inicio_reloj)
 
 
-# Busqueda A*
+#Busqueda A*
 def busqueda_a_estrella(problema, heuristica=None):
     if heuristica is None:
         from Core.heuristica import heuristica_recomendada
