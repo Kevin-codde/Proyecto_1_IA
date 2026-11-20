@@ -1,42 +1,48 @@
-# Heuristicas para A*
-
 def h_cero(problema, estado):
+    """Heuristica nula para Costo Uniforme (UCS)."""
     return 0
 
 
-def distancia_manhattan(pos1, pos2):
-    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
+def distancia_manhattan(posicion_origen, posicion_destino):
+    """Calcula distancia en cuadricula sin considerar paredes."""
+    return abs(posicion_origen[0] - posicion_destino[0]) + abs(posicion_origen[1] - posicion_destino[1])
 
 
-# Cuenta cuantas victimas mueren seguro usando distancia Manhattan
 def h_manhattan_condenadas(problema, estado):
-    condenadas = 0
-    pos_agente = (estado.fila, estado.columna)
+    """Cuenta cuantas victimas vivas ya no se alcanzan a salvar usando distancia Manhattan."""
+    victimas_perdidas = 0
+    posicion_agente = (estado.fila, estado.columna)
 
-    for id_v in estado.vivas:
-        v = problema.victimas[id_v]
-        ticks_rest = v.ticks - estado.tick
-        dist_m = distancia_manhattan(pos_agente, (v.fila, v.columna))
-        if dist_m > ticks_rest:
-            condenadas += 1
+    # Revisamos cada victima que sigue viva en este estado
+    for id_victima in estado.vivas:
+        victima = problema.victimas[id_victima]
+        tiempo_restante = victima.ticks - estado.tick
+        distancia_pasos = distancia_manhattan(posicion_agente, (victima.fila, victima.columna))
 
-    return condenadas
+        # Si el número de pasos es mayor que el tiempo, entonces no se puede salvar
+        if distancia_pasos > tiempo_restante:
+            victimas_perdidas += 1
+
+    return victimas_perdidas
 
 
-# Cuenta cuantas victimas mueren considerando las paredes del mapa
 def h_distancia_real_condenadas(problema, estado):
-    condenadas = 0
-    pos_agente = (estado.fila, estado.columna)
+    """Cuenta cuantas victimas vivas mueren considerando las paredes del mapa (distancias reales)."""
+    victimas_perdidas = 0
+    posicion_agente = (estado.fila, estado.columna)
 
-    for id_v in estado.vivas:
-        ticks_rest = problema.victimas[id_v].ticks - estado.tick
-        dist_mapa = problema.dist_real[id_v].get(pos_agente)
-        if dist_mapa is None or dist_mapa > ticks_rest:
-            condenadas += 1
+    for id_victima in estado.vivas:
+        tiempo_restante = problema.victimas[id_victima].ticks - estado.tick
+        distancia_en_laberinto = problema.dist_real[id_victima].get(posicion_agente)
 
-    return condenadas
+        # Si no hay camino (None) o la distancia real supera los ticks restantes, se pierde
+        if distancia_en_laberinto is None or distancia_en_laberinto > tiempo_restante:
+            victimas_perdidas += 1
+
+    return victimas_perdidas
 
 
+# Heuristica mas informada que domina a Manhattan
 heuristica_recomendada = h_distancia_real_condenadas
 
 HEURISTICAS_DISPONIBLES = {
