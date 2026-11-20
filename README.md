@@ -9,6 +9,11 @@ python main.py
 ```
 
 ## Estructura (y responsables)
+## Integrantes
+
+* **Kevin Andres Bejarano** — Código: `2067678`
+* **Jose David Marmol Otero** — Código: `2266370`
+* **Luis David Mendoza Manzano** — Código: `2067621`
 
 ```
 Proyecto1/
