@@ -3,7 +3,7 @@
 import heapq  #Cola de prioridad
 import itertools # lo utilizamos para generar numeros crecientes para el desempate
 import time
-from Core.heuristica import h_cero 
+from Core.heuristica import h_cero, h_distancia_real_condenadas
 from collections import deque
 
 #Implementación  de los 4 algoritmos de busqueda :
@@ -192,9 +192,7 @@ def busqueda_profundidad_iterativa(problema):
     return Resultado("IDDFS",mejor,problema,expandidos,generados,time.perf_counter() - inicio_reloj)
 
 
-#Busqueda A*
-def busqueda_a_estrella(problema, heuristica=None):
-    if heuristica is None:
-        from Core.heuristica import heuristica_recomendada
-        heuristica = heuristica_recomendada
+# Busqueda A*
+def busqueda_a_estrella(problema, heuristica=h_distancia_real_condenadas):
+    """Ejecuta el algoritmo A* usando la heuristica de distancia real."""
     return _busqueda_por_prioridad(problema, heuristica, "A*")
